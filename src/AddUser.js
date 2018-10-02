@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 
 class AddUser extends Component {
     state = {
@@ -8,10 +7,11 @@ class AddUser extends Component {
             lastName: "",
             username: ""
         },
-        userExists: false
+
+        userExist: false
     };
 
-    contactExists = currUsername => {
+    userExist = currUsername => {
         const users = this.props.users;
         for (let user of users) {
             if (user.username === currUsername) {
@@ -23,20 +23,19 @@ class AddUser extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        const userExists = this.contactExists(this.state.user.username);
+        const userExist = this.userExist(this.state.user.username);
 
-        if (!userExists) {
+        if (!userExist) {
             this.props.onAddUser(this.state.user);
         }
 
         this.setState(() => ({
-            userExists
+            userExist
         }));
     };
 
     handleInputChange = event => {
         const { name, value } = event.target;
-
         this.setState(currState => ({
             ...currState,
             user: {
@@ -76,14 +75,14 @@ class AddUser extends Component {
                         <input
                             type="text"
                             name="username"
-                            placeholder="Enter username"
+                            placeholder="Enter Username"
                             value={username}
                             onChange={this.handleInputChange}
                         />
                     </div>
                     <button disabled={this.isDisabled()}>Add</button>
                 </form>
-                {this.state.userExists ? (
+                {this.state.userExist ? (
                     <p className="error">
                         You cannot add a user that already exists.
                     </p>
@@ -94,10 +93,5 @@ class AddUser extends Component {
         );
     }
 }
-
-AddUser.propTypes = {
-    onAddUser: PropTypes.func.isRequired,
-    users: PropTypes.array.isRequired
-};
 
 export default AddUser;
